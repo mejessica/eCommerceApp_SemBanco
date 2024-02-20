@@ -1,47 +1,43 @@
 // app/data/products.js
-export const products = [{
-
-    id : 1,
+export const products = [
+  {
+    id: 1,
     product_title: 'Test Product 1',
     category_id: 'men',
-    price : 17,
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imglink:'/assets/images/men_fashion.jpg',
+    price: 17,
+    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    imglink: '/assets/images/men_fashion.jpg',
   },
   {
-
-    id : 2,
+    id: 2,
     product_title: 'Test Product 2',
     category_id: 'men',
-    price : 10,
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imglink:'/assets/images/shirt.jpg',
+    price: 10,
+    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    imglink: '/assets/images/shirt.jpg',
   },
   {
-
-    id : 3,
+    id: 3,
     product_title: 'Test Product 3',
     category_id: 'women',
-    price : 52,
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imglink:'/assets/images/women.jpg',
+    price: 52,
+    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    imglink: '/assets/images/women.jpg',
   },
   {
-
-    id : 4,
+    id: 4,
     product_title: 'Test Product 4',
     category_id: 'men',
-    price : 30,
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imglink:'/assets/images/men_shoes.jpg',
+    price: 30,
+    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    imglink: '/assets/images/men_shoes.jpg',
   },
   {
-
-    id : 5,
+    id: 5,
     product_title: 'Test Product 5',
     category_id: 'kids',
-    price : 5,
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imglink:'/assets/images/bottle.jpg',
+    price: 5,
+    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    imglink: '/assets/images/bottle.jpg',
   },
 ];

@@ -1,3 +1,8 @@
+.category_linkto{
+  color: black;
+  text-decoration: none;
+}
+
 /* .product{
     display:inline-block;
     margin:2px;
@@ -22,7 +27,6 @@
 .navbar-brand {
   width: 85vw;
   padding-left: 5rem;
- 
 }
 
 /*
@@ -58,3 +62,27 @@
     max-width: 14vw;
 }  */
 
+.customh4 {
+  font-size: 1.5vw;
+}
+
+.productdesc {
+  max-width: 16vw;
+}
+
+.pdetails {
+  margin: 5% 0%;
+}
+
+.descpd {
+  margin: 3% 0%;
+}
+.pricepd {
+  margin: 4% 0%;
+}
+.btnpd {
+  margin: 12% 0%;
+}
+.imgpd {
+  width: 30rem;
+}

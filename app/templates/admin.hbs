@@ -1,35 +1,43 @@
 {{page-title "Admin"}}
 <br>
 
-  {{!-- Create product div--}}
+{{!-- Create product div--}}
 <div class="row">
-	
+
   <div class="col-4 add_edit">
-        <LinkTo class='btn btn-success' @route="admin.add" >Add Product</LinkTo>
-        {{!-- <LinkTo class='btn btn-success' @route="admin.edit" @model={{item.id}}>Edit</LinkTo> --}}
-		<hr>
-	  	{{outlet}}  
+    <LinkTo class='btn btn-success' @route="admin.add">Add Product</LinkTo>
+    {{!-- <LinkTo class='btn btn-success' @route="admin.edit" @model={{item.id}}>Edit</LinkTo> --}}
+    <hr>
+    {{outlet}}
   </div>
 
   {{!-- Products List div--}}
 
-	<div class="col-8 products">
-      <div class="row">
+  <div class="col-8 products">
+    <div class="row">
       {{#each @model as |item|}}
 
-        <div class="col-lg-4 col-md-4 col-sm-6 col-12">
-          <br>
-          <div class="card">
-            <img class="card-img-top img-fluid" src={{item.imglink}} alt="product image">
-            <div class="card-body">
-              <LinkTo @route="admin.edit" @model={{item.id}}><h6 class="card-title ">{{item.product_title}}</h6></LinkTo>
-              <p class="card-text d-inline-block text-truncate productdesc" >{{item.desc}}</p>
-              <h5  class="card-text">$ {{item.price}}</h5>
-            </div>    
+      <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+        <br>
+
+        <AdminProduct @source={{item.imglink}} @title={{item.product_title}} @desc={{item.desc}} @price={{item.price}}
+          @route="admin.edit" @model={{item.id}}>
+        </AdminProduct>
+
+        {{!-- <div class="card">
+          <img class="card-img-top img-fluid" src={{item.imglink}} alt="product image">
+          <div class="card-body">
+            <LinkTo @route="admin.edit" @model={{item.id}}>
+              <h6 class="card-title ">{{item.product_title}}</h6>
+            </LinkTo>
+            <p class="card-text d-inline-block text-truncate productdesc">{{item.desc}}</p>
+            <h5 class="card-text">$ {{item.price}}</h5>
           </div>
-        </div> 
+        </div> --}}
+        
+      </div>
       {{/each}}
     </div>
-	
+
   </div>
 </div>

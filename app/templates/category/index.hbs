@@ -1,0 +1,28 @@
+{{page-title "Category"}}
+<div class="row">
+
+    {{#each @model as |item|}}
+
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+           <br>
+
+           <LinkTo   class="category_linkto"  @route="category.item" @model = {{item.id}} >
+           
+           <CategoryProduct 
+           @source={{item.imglink}} @title={{item.product_title}} @desc={{item.desc}} @price={{item.price}}>
+           </CategoryProduct>
+           </LinkTo>
+
+           {{!-- <div class="card">
+                <img class="card-img-top img-fluid" src={{item.imglink}} alt="product image">
+                <div class="card-body">
+                    <h6 class="card-title ">{{item.product_title}}</h6>
+                    <p class="card-text d-inline-block text-truncate productdesc" >{{item.desc}}</p>
+                    <h5  class="card-text">$ {{item.price}}</h5>
+                </div>    
+            </div> --}}
+        </div> 
+        
+    {{/each}}
+
+</div>
