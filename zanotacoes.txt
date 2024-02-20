@@ -1,0 +1,283 @@
+Configurando Ember CLI - kit de ferramentas de linha de comando para desenvolver aplicativos Ember.
+
+
+Configirar através do npm Node - instalar node >nodejs.org  (comando node -v)
+
+instalar o git - npm install --save npm-git-install
+instalar o ember - npm install -g ember-cli
+
+-g (flag que diz para instalar global, acessado de auqleur lugar do sistema)
+
+comando para criar uma aplicação - ember new FirstApp
+
+------------------------------
+>>>Templates
+
+na compilação o hbs converte modelos em funções js
+templatesd de rotas - renderizdos quando um usuário visita unm url
+templates de componentes - conteudo reutilizavel
+
+{{page-title "FirstApp"}} - expressao com auxiliar chamado page-title, define o titulo da pagina na guia de navegação
+
+<WelcomePage/> - componentes
+
+{{outlet}} - expressão dinamica 
+
+#each - usado para iterar matrizes e listas
+Definimos um array usando (array).
+
+hash - Inserimos objetos em nosso array. A função auxiliar hash é responsável por criar 
+Plain Old JavaScript Objects (POJO - objeto js antigo simples) em nossos modelos. 
+O código acima cria o seguinte array de objetos.
+[
+{'fruit': 'Mango', 'color' : 'Yellow'},
+{'fruit': 'Strawberry ', 'color' : 'Red'},
+{'fruit': 'Banana', 'color' : 'Yellow'}
+]
+
+as |item| -Especificamos que queremos acessar cada item em um array como um arquivo item. 
+Ao percorrer o array, obtemos cada item com o nome que especificamos após a aspalavra-chave.
+
+o hbs irá ignorar erros nao gerando eles. 
+
+---------
+style
+
+Suponhamos que temos um cart componente em nossa aplicação. Podemos criar um arquivo de estilo separado 
+chamado cart.css e importá-lo usando @import ./cart.css. em app.css.
+
+arquivos assets -
+arquivos css usam um pacote chamado Broccoli para agrupar os assets. O ember-cli-buil.js 
+
+-----------
+template index in ember
+
+cada rota no ember possui uma rota index que pode ter um template index. 
+no template application.hbs vai todos os componentes comuns para todas as rotas.
+
+no application contem a expressao dinamica {{outlet}} isso significa que as rotas serão renderizadas ali 
+
+
+questões
+
+Podemos escrever qualquer expressão JavaScipt entre chaves em modelos Ember. falso
+Você só pode usar um conjunto restrito de auxiliares, referências de atributos e variáveis ​​de bloco. Lembre-se da regra do menor poder.
+
+addons - pacotes feitos para o ecossistema ember, chamados de addons
+Os complementos podem incluir código JavaScript, componentes de UI reutilizáveis, ferramentas de compilação, ferramentas de visualização de dados, 
+pipelines de implantação, modelos, folhas de estilo e muito mais.
+
+para isntalar um addons é usado o comando 
+ember i <addon-name>
+semelhante ao npm i- cria uma entrada no app package.json e baixa o complemento e suas dependecias e um node_modules. 
+o ember install faz mais do que o npm, alguns addons criam novos arquivos ou fazem modificações em seu aplicaçãoquando sao instalados via ember install
+
+exemplo de tabuada com template 
+{{page-title "Templates Challenge"}}
+
+{{#each
+(array
+    (hash multiple='1' results='9')
+    (hash multiple='2' results='18')
+    (hash multiple='3' results='27')
+    (hash multiple='4' results='36')
+    (hash multiple='5' results='45')
+    (hash multiple='6' results='54')
+    (hash multiple='7' results='63')
+    (hash multiple='8' results='72')
+    (hash multiple='9' results='81')
+    (hash multiple='10' results='90')
+    ) as |number|
+}}
+
+<div>
+    <p> 9 x {{number.multiple}} = {{number.results}}</p>
+</div>
+<hr>
+
+{{/each}}
+
+
+-------------------------------------------
+
+Introdução ao Roteamento
+
+router.js - contem o mapa do site do nosos aplicativo. esse arquivo é reponsavel por mapear todas
+as nossas rotas no navegador.
+
+Criando Manualmente #
+
+>Crie um arquivo no app/routesdiretório e nomeie-o como cart.js.
+>Crie um modelo para nossa rota no app/templatesdiretório chamado cart.hbs.
+
+o noem da rota e do tempalte devem ser iguais. Isso permite que o routing combine o template com a rota
+então precisamos listar essa rota no router.js para que a aplicação carregue nossa rota, adicionando no map()
+
+caso queiramos mudar o nome do caminho basta adicionar 
+ this.route('about' , {path: '/about-us'});
+
+Criando uma rota usando Ember CLI #
+
+>ember generate route cart
+
+esse comando cria um js no routes um hbs no templates lista no map() e adiciona um arquivo de teste 
+
+Tipos de Rotas #
+
+Rota básica > rotas unicas como o exemplo acima
+
+Rota aninhada > rotas dentro de rotas
+usadas quando precisamos carregar um template dentro de um template. 
+para gerar rotas aninhadas em rotas existentes COMANDO > ember g route admin/add (gera uma rota add dentro da admin)
+
+ou Manualmente
+
+Router.map(function () {
+  this.route('admin', function() {
+    this.route('add');
+  });
+});
+
+Application Route > rota padrão que carrega quando a aplicação é inicializada. 
+nesse caso carrega application.hbs 
+Colocamos conteúdos como cabeçalho, rodapé, barra de navegação ou qualquer outro conteúdo decorativo na applicationrota. 
+Todas as nossas rotas renderizam seus templates no formato application.hbs.
+
+Index Route > cada nível da rota aninhada no ember possui uma index rota para o / caminho. 
+a index rota substitui o {{outlet}} de uma rota e quando outra é carregada ela substitui a index. 
+o {{outlet}} fornece um local para outras rotas serem carregadas 
+
+isso 
+Router.map(function () {
+  this.route('index', {path: '/'});
+  this.route('admin', function() {
+    this.route('index', {path: '/'});
+    this.route('add');
+  });
+});
+
+equivale a isso 
+Router.map(function () {
+  this.route('admin', function() {
+   this.route('add');
+  });
+});
+
+Rota Dinamica > sao as que carregam dados dinamicos nas rotas. a mesma rota pode ser preenchida com diferentes 
+modelos de dados. Caso queiramos mostrar os detalhes de algum produto, os dados serao diferetens mas serao renderizados na mesma rota.
+http:localhost:4200/products/item/<item_id>
+<item_id> é alterada. 
+
+Rota 404 > carrega quando a rota nao existentes
+
+Configurações do Routing #
+
+O router.js arquivo contem as config das rotas, como um mapa do site. contem as definições de todas as rotas
+
+import EmberRouter from '@ember/routing/router';
+import config from 'e-commerce-app/config/environment';
+
+export default class Router extends EmberRouter {
+  location = config.locationType;
+  rootURL = config.rootURL;
+}
+
+Router.map(function () {
+  this.route('cart');
+});
+
+    EmberRoute classe é responsável por gerenciar URLs e o estado da aplicação 
+    ecommerce-app/config/environment o environment arquivo contem as config essenciais
+da aplicação como rootURL
+    locationType - como rota atual do aplaicativo sera manifestado na url
+    rootURL-  config que impoartamos do environment. 
+
+
+Transição entre rotas #
+ > o router começa a procurar a rota no fomrato app/router.js 
+ > assim que o roteador encontra a rota ele começa a procurar os arquivos js relacionados em app/routes e app/controllers
+ > depois de encontrar o js em app/routes, o handler de rota ember carrega o modelo da rota que contem os dados em nosso hbs template 
+ entao vemos a rota no navegador
+ > o handler route tmabem encontra o arquivo js no app/controllers e carrega sua logica no template. 
+
+
+
+Route Handlers #
+
+Os dados são carregados do banco e os handlers quem carregam os dados nas rotas
+
+temos um model hook no handler responsavel por carregar os dados. um hook é um metodo chamado automaticamente 
+em alguma ação em nossa aplicação. semrpe que uma rota é visitada seu model() hook é chamado para carregar os dados.
+
+e os dados nesse hook podem ser acessados no template usando o @model
+{{@model}}
+
+
+Modificando nossa página inicial #
+
+nosso array é substituído por @modele o #eachauxiliar percorre nosso model que retorna um array de objetos.
+
+Rota 404 #
+Adicionamos um * no caminho. Isso significa que especificamos que para qualquer coisa após a /, carregue a not-foundrota. Isso funciona para todas as rotas, exceto para a rota definida.
+
+
+Rotas Aninhadas #
+
+pagina da admin - admin carega todos
+    admin/add - entra na add route
+    admin-edit - entra an edit route ao clicar no produto
+    ember g route admin/add
+    ember g route admin/edit
+
+pagina da categoria - 
+    quando o usuario visita uma categoria - http://localhost:4200/category/<category_name>
+    quando o usuario clica em um determinado produto, abre-s uma apgina que mostre os detalhes - item rota
+cada propduto possui um id e o url sera - http://localhost:4200/category/Men/item/<id> 
+    category/item 
+
+ember g route category/item
+
+
+ 
+    <div class="row">
+        {{#each @model as |item|}}
+            
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <LinkTo @route="category" @model={{item.category_id}} >
+
+o que acontece nesse trecho de código é: o @model dignifica o array de objetos que foi importado dos dados
+o each irá passar por cada objeto guardando ele na variavel item 
+quando chamamos @model={{item.category_id}} significa que estamos chamando a vairavel item que engloba o objeto
+e dentro dele o dado category_id que substituirá o valor na url
+
+no handler da rota category adicionamos o seguinte
+ model(params){
+        return params.id;
+    }
+    o que isso faz? recebe o model passado na index.hbs routes no parametro da model()
+    aí retornamos esse modelo para category_hbs. vamos abrir o category.hbs template e definir o titulo da pagina de acordo com a categoria.
+
+ model(params){
+        return products;
+    }
+    importamos o products do data e retornamos no hannldre, entao renderizamos no category.hbs
+
+produtos por categoria #
+
+  return products.filter(({category_id}) => category_id == params.id);
+
+  o filter é uma função para arrays ele filtra com base no category_id que recebsmos do params 
+
+
+  Transição de rota #
+
+  CRUD no projeto
+
+Os produtos são criados usando a addrota.
+Os produtos podem ser lidos nas rotas admine category.
+Os produtos podem ser atualizados e excluídos da editrota.
+Os produtos podem ser pesquisados ​​e classificados nas rotas admine category.
+
+Ember Inspector #
+
+extensão para navegador da web. usado para depurar e inspecionar aplicativos Ember 
