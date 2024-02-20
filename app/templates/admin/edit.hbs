@@ -36,7 +36,8 @@
         </div>
         <br>
     </form>
-    <LinkTo @route="admin"><button class="btn btn-success" type="submit">Done</button></LinkTo>
-    <LinkTo class='btn btn-danger' @route="admin" >Delete</LinkTo>  
+
+    <button class="btn btn-success" type="submit" {{on 'click' this.editProduct}}>Done</button>
+    <button class='btn btn-danger'  {{on 'click' this.deleteProduct}}>Delete</button>
 
 </div>

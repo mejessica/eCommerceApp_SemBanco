@@ -1,4 +1,4 @@
-.category_linkto{
+.category_linkto {
   color: black;
   text-decoration: none;
 }
@@ -67,7 +67,7 @@
 }
 
 .productdesc {
-  max-width: 16vw;
+  max-width: 14vw;
 }
 
 .pdetails {
@@ -77,12 +77,15 @@
 .descpd {
   margin: 3% 0%;
 }
+
 .pricepd {
   margin: 4% 0%;
 }
+
 .btnpd {
   margin: 12% 0%;
 }
+
 .imgpd {
   width: 30rem;
 }

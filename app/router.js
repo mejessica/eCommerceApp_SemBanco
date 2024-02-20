@@ -16,4 +16,5 @@ Router.map(function () {
     this.route('item', { path: 'item/:itemkey' });
   });
   this.route('not-found', { path: '/*path' });
+  this.route('practice');
 });

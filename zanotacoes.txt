@@ -281,3 +281,122 @@ Os produtos podem ser pesquisados ​​e classificados nas rotas admine categor
 Ember Inspector #
 
 extensão para navegador da web. usado para depurar e inspecionar aplicativos Ember 
+
+Componentes #
+
+os componentes permitem converter extos e estilos de marcação em codgio reutilizavel
+ -O modelo Handlebars é um hbsarquivo que contém a UI desse componente. 
+ -O arquivo do componente JavaScript lida com todos os eventos nessa UI.
+
+ comando para criar um componente : >> ember g component <component-name>
+Os componentes devem ter um -em seu nome para evitar conflito com nomes de elementos HTML.
+
+o comando cria um arquivo app componente e um arquivo de teste
+
+ember g component-class <component-name> - cria um arquivo js para o componente
+
+ember g component test-comp > renderiza dentro co componente
+
+no category.hbs ha o seguitne codigo 
+        <CategoryProduct 
+           @source={{item.imglink}} @title={{item.product_title}} @desc={{item.desc}} @price={{item.price}}>
+        </CategoryProduct>
+dentro dele há as especificações dos atributos do componente colocadas pelo template
+
+
+PARA FAZER RODAR A ROTA ITEM >> ou seja mostrar os detalhes do produto
+
+o componente produtctDetails é renderizado na item rota
+Precisamos criar uma index rota para a nossa category rota conseguir fazer isso pois renderizadmos toda a lista de produtos da category a partir do index. 
+o {{outlet} no application.hbs template carrega as rotas index e item}
+
+ let item = products.find(({ id }) => id == params.itemkey);
+ Usamos o find método para filtrar o produto com base no arquivo itemkey. O findmétodo retorna um único elemento correspondente do array. 
+ No nosso caso, retorna um objeto da lista de produtos.
+
+ ---------------
+ outlet e yield
+
+ {{outlet}} -> Isto fornecerá um stub/hook/point no qual você pode renderizar componentes (Controller + View). Alguém poderia usar isso com o método render de rotas.
+  No seu caso, você provavelmente terá uma rota detalhada que pode ser semelhante a esta. Isso renderizaria o DetailsController com DetailsView na saída 'detailsOutlet' do modelo de índice.
+
+{{yield}} -> Indica uma área de um template que será renderizada dentro de outro template
+
+----------- Controllers ----------------------------
+
+podemos criar através do comando
+>>>ember g controller <name>
+
+o nome do controller deve ser igual ao nome da rota este comando tambem gera um teste
+
+---- Relação entre rotas e controller #
+
+os dois funcionam para uma mesma url, as rotas so podem passar model para templates, enquanto podemos definir propriedades e ações nos controladores
+
+as ações do ember sao funçoes simples que podem ser usadas em templates do ember e definidas em controladores. 
+se definirmos nossas açoes, variaveis ou propriedades no router.js elas nao estarao disponiveis para os ocmponentes filhos.
+se tentarmos acessar o resultado do model()gancho, que sao os dados, do controlador
+
+---Quando usar um controller
+Usamos um controlador para passar ações e variáveis ​​para os componentes filhos de uma rota.
+Usamos um controlador para passar propriedades computadas com base nos model()resultados do gancho.
+Usamos um controlador para usar parâmetros de consulta.
+Usamos um controlador para usar propriedades rastreadas.
+
+----Definindo uma ação #
+
+usamos o ON modificador HTML para anexar um handler de eventos a uma tag HTML
+
+ao clicar no botao o ember primeiro encontra o pratice.js (controller) e depois encontr ao clicked action no arquivo
+
+Adicionamos um @action decorador. Um @action decorador define um arquivo action. Um action é um método JavaScript que pode ser criado a partir de um modelo.
+
+---------- Tracked Property
+ importadas do glimmer
+uando uma propriedade é marcada como rastreada, ela renderiza novamente o DOM sempre que o valor dessa propriedade rastreada é alterado
+
+fn - auxiliar de função por parametro 
+
+propriedade computada - 
+get total(){
+        return this.count * this.multiple;
+    }
+
+propriedade rastreada - 
+ @tracked count = 0;
+
+    @action
+    increment(){
+        this.count = this.count+1;
+    }
+
+    @action
+    decrement(){
+        this.count = this.count-1;
+    }
+
+no controller
+ let title = this.title;
+    let desc = this.desc;
+    let price = this.price;
+
+    Recebemos o valor de nossos campos de entrada do controlador. Usamos this.'<value_name>'para acessar qualquer valor do nosso modelo
+    Para category, recebemos nosso menu de seleção e extraímos o valor selecionado.
+
+    <button class="btn btn-success" type="submit" {{on 'click' this.editProduct}}>Done</button>
+    <button class='btn btn-danger'  {{on 'click' this.deleteProduct}}>Delete</button>
+
+apóis o this são manipuladores de eventos ou seja funções
+
+ >>let title = this.get('model.product_title');
+usamos this.get('<value_name>')para receber valores dos campos de entrada. Usamos o getmétodo porque os campos de valor no templates não são definidos como strings.
+
+
+A propriedade Computed é usada quando precisamos renderizar algo com base em alguns cálculo
+
+ual função é usada para passar a modelfunção para o controlador? setupController()
+Podemos acessar o model()gancho (os dados) no router.jsarquivo. falso - Se tentarmos acessar o resultado do gancho do modelo a partir do arquivo JS da rota, obteremos apenas a própria função.
+
+ Precisamos especificar explicitamente o controlador para uma rota. - Falso - Os controladores são emparelhados com a rota usando o mesmo nome.
+
+ 
