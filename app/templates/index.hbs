@@ -1,0 +1,27 @@
+{{page-title "ECommerceApp"}}
+<div class="row">
+
+    <div class="row">
+        <img class="img-fluid" src="assets/images/slider.png" alt=" Carousel">
+    </div>
+
+    <div class="row">
+
+        {{#each @model as |item|}}
+
+        <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+             <LinkTo @route="category" @model="{{item.category_id}}" >
+            <br>
+
+            <div class="card category">
+                <img class="card-img-top" src={{item.imglink}} alt="Card image cap">
+                <div class="card-body">
+                    <h4 class="card-text text-center customh4">{{item.title}}</h4>
+                </div>
+            </div>
+            </LinkTo>
+        </div>
+
+        {{/each}}
+    </div>
+</div>

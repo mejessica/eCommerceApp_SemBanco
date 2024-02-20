@@ -1,1 +1,60 @@
-/* Ember supports plain CSS out of the box. More info: https://cli.emberjs.com/release/advanced-use/stylesheets/ */
+/* .product{
+    display:inline-block;
+    margin:2px;
+    border :1px solid black;
+    width:24%;
+
+}
+.product img{
+    display: block;
+    width: 100%;
+    height: 80%;
+}
+.product h3{
+    text-align:center;
+
+} */
+
+.customh4 {
+  font-size: 1.3vw;
+}
+
+.navbar-brand {
+  width: 85vw;
+  padding-left: 5rem;
+ 
+}
+
+/*
+#Error_Msg {
+  font-weight: bold;
+  font-size: 62px;
+  margin-bottom: 16px;
+}
+
+.add_edit {
+  border: 1px solid red;
+}
+
+.products {
+  text-align: center;
+  border: 1px solid black;
+
+}
+
+.add {
+  border: 1px dotted blue;
+}
+
+.edit {
+  border: 1px dotted blue;
+} */
+
+.productdesc {
+  max-width: 14vw;
+}
+
+/* .producttitle{
+    max-width: 14vw;
+}  */
+
