@@ -5,7 +5,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
                 {{!-- <a class="navbar-brand" href="#">Ecommerce App</a> --}}
-                <LinkTo @route="index"><h1 class="navbar-brand">Ecommerce App</h1></LinkTo>
+                <LinkTo class="category_linkto" @route="index"><h1 class="navbar-brand">Ecommerce App</h1></LinkTo>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,13 +17,13 @@
                     <ul class="navbar-nav">
 
                         <li class="nav-item active nav-link">
-                            <LinkTo @route="application">Home</LinkTo>
+                            <LinkTo class="category_linkto" @route="application">Home</LinkTo>
                         </li>
                         <li class="nav-item  nav-link">
-                            <LinkTo @route="admin">Admin</LinkTo>
+                            <LinkTo class="category_linkto" @route="admin">Admin</LinkTo>
                         </li>
                         <li class="nav-item  nav-link">
-                            <LinkTo @route="cart">Cart</LinkTo>
+                            <LinkTo class="category_linkto" @route="cart">Cart</LinkTo>
                         </li>
 
                     </ul>
