@@ -19,14 +19,18 @@
     text-align:center;
 
 } */
+.navbar-nav {
+  font-size: 1.5rem;
+}
 
 .customh4 {
   font-size: 1.3vw;
 }
 
 .navbar-brand {
-  width: 85vw;
+  width: 80vw;
   padding-left: 5rem;
+  font-size: 3rem;
 }
 
 /*
@@ -88,4 +92,8 @@
 
 .imgpd {
   width: 30rem;
+}
+
+.navbar {
+  margin-bottom: 2rem;
 }
