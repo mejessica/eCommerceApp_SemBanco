@@ -686,3 +686,36 @@ novo:
     }
 
 O find método retorna um único elemento correspondente do array. 
+
+Criando um aplicativo no Firebase (ou qualquer integração com o banco)#
+
+salvar dados----
+let product = this.store.createRecord('product', {
+  title: 'Test Product',
+  desc: 'This is just a test description',
+  price: 10,
+  category: 'men',
+  imglink : 'Sample image link'
+});
+
+product.save() // This will save the product to the database.
+
+criamos um record product models usando o storage do ember data
+Persistimos o produto criado usando o save() método. O save() método 
+faz uma chamada de rede para salvar o produto no banco em /products.
+
+recuperar dados--------
+
+let products = this.store.findAll('product');  // => GET /products
+
+o store primeiro verifica os registros em seu cache local. se estiver rpesente, ele faz uma chamada de rede para recuperar 
+todos os produtos. 
+
+EmberFire
+EmberFire é um adaptador Firebase para aplicativos Ember. Ele se integra e 
+funciona diretamente com o Ember Data, que persiste os dados do nosso aplicativo.
+ O EmberFire pode ser instalado como um complemento Ember CLI.
+
+ instalação : ember install emberfire@next
+
+ criar serialize : ember g serializer application
