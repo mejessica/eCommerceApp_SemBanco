@@ -17,65 +17,31 @@
 
     {{!-- search div --}}
     <div class="row">
-			<div class="col-md-8">
-				
-        <form class="form-inline">
-					<div class="form-group" style="display: inline-block;">
-						{{input type="text" class="form-control" value=filter  id="search" placeholder="Search Products..."}}
-          </div>
-          <div style="display: inline-block;">
-				    <button type="submit" {{action 'search'}} class="btn btn-primary">Search</button>
-          </div>
-				</form>
-            
-		</div>
 
-      {{!-- product div --}}
-    <div class="row">
 
-      {{#if this.appliedfilter }}
-        
-        {{#each filteredProducts as |item|}}
-          <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+        {{#each @model as |item|}}
+
+        <div class="col-lg-4 col-md-4 col-sm-6 col-12">
           <br>
-          <AdminProduct @source={{item.imglink}} @title={{item.product_title}} @desc={{item.desc}} @price={{item.price}} @route="admin.edit" @model={{item.id}}/>
-          </div> 
+
+          <AdminProduct @source={{item.imglink}} @title={{item.product_title}} @desc={{item.desc}} @price={{item.price}}
+            @route="admin.edit" @model={{item.id}}>
+          </AdminProduct>
+
+          {{!-- <div class="card">
+            <img class="card-img-top img-fluid" src={{item.imglink}} alt="product image">
+            <div class="card-body">
+              <LinkTo @route="admin.edit" @model={{item.id}}>
+                <h6 class="card-title ">{{item.product_title}}</h6>
+              </LinkTo>
+              <p class="card-text d-inline-block text-truncate productdesc">{{item.desc}}</p>
+              <h5 class="card-text">$ {{item.price}}</h5>
+            </div>
+          </div> --}}
+
+        </div>
         {{/each}}
-        
-        
-      {{else}}
-          {{#each @model as |item|}}
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12">
-              <br>
-              <AdminProduct @source={{item.imglink}} @title={{item.product_title}} @desc={{item.desc}} @price={{item.price}} @route="admin.edit" @model={{item.id}}/>
-            </div> 
-          {{/each}}
-
-      {{/if}}
-
-      {{!-- {{#each @model as |item|}}
-
-      <div class="col-lg-4 col-md-4 col-sm-6 col-12">
-        <br>
-
-        <AdminProduct @source={{item.imglink}} @title={{item.product_title}} @desc={{item.desc}} @price={{item.price}}
-          @route="admin.edit" @model={{item.id}}>
-        </AdminProduct>
-
-        {{!-- <div class="card">
-          <img class="card-img-top img-fluid" src={{item.imglink}} alt="product image">
-          <div class="card-body">
-            <LinkTo @route="admin.edit" @model={{item.id}}>
-              <h6 class="card-title ">{{item.product_title}}</h6>
-            </LinkTo>
-            <p class="card-text d-inline-block text-truncate productdesc">{{item.desc}}</p>
-            <h5 class="card-text">$ {{item.price}}</h5>
-          </div>
-        </div> 
-        
       </div>
-      {{/each}} --}}
-    </div>
 
+    </div>
   </div>
-</div>
