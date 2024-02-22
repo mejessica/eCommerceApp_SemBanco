@@ -2,10 +2,6 @@
 
 module.exports = function (environment) {
   const ENV = {
-    contentSecurityPolicy: {
-      'connect-src': "'self' https://auth.firebase.com wss://*.firebaseio.com",
-    },
-
     modulePrefix: 'e-commerce-app',
     environment,
     rootURL: '/',
