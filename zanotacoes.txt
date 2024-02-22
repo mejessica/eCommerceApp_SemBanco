@@ -1,0 +1,757 @@
+Configurando Ember CLI - kit de ferramentas de linha de comando para desenvolver aplicativos Ember.
+
+
+Configirar através do npm Node - instalar node >nodejs.org  (comando node -v)
+
+instalar o git - npm install --save npm-git-install
+instalar o ember - npm install -g ember-cli
+
+-g (flag que diz para instalar global, acessado de auqleur lugar do sistema)
+
+comando para criar uma aplicação - ember new FirstApp
+
+------------------------------
+>>>Templates
+
+na compilação o hbs converte modelos em funções js
+templatesd de rotas - renderizdos quando um usuário visita unm url
+templates de componentes - conteudo reutilizavel
+
+{{page-title "FirstApp"}} - expressao com auxiliar chamado page-title, define o titulo da pagina na guia de navegação
+
+<WelcomePage/> - componentes
+
+{{outlet}} - expressão dinamica 
+
+#each - usado para iterar matrizes e listas
+Definimos um array usando (array).
+
+hash - Inserimos objetos em nosso array. A função auxiliar hash é responsável por criar 
+Plain Old JavaScript Objects (POJO - objeto js antigo simples) em nossos modelos. 
+O código acima cria o seguinte array de objetos.
+[
+{'fruit': 'Mango', 'color' : 'Yellow'},
+{'fruit': 'Strawberry ', 'color' : 'Red'},
+{'fruit': 'Banana', 'color' : 'Yellow'}
+]
+
+as |item| -Especificamos que queremos acessar cada item em um array como um arquivo item. 
+Ao percorrer o array, obtemos cada item com o nome que especificamos após a aspalavra-chave.
+
+o hbs irá ignorar erros nao gerando eles. 
+
+---------
+style
+
+Suponhamos que temos um cart componente em nossa aplicação. Podemos criar um arquivo de estilo separado 
+chamado cart.css e importá-lo usando @import ./cart.css. em app.css.
+
+arquivos assets -
+arquivos css usam um pacote chamado Broccoli para agrupar os assets. O ember-cli-buil.js 
+
+-----------
+template index in ember
+
+cada rota no ember possui uma rota index que pode ter um template index. 
+no template application.hbs vai todos os componentes comuns para todas as rotas.
+
+no application contem a expressao dinamica {{outlet}} isso significa que as rotas serão renderizadas ali 
+
+
+questões
+
+Podemos escrever qualquer expressão JavaScipt entre chaves em modelos Ember. falso
+Você só pode usar um conjunto restrito de auxiliares, referências de atributos e variáveis ​​de bloco. Lembre-se da regra do menor poder.
+
+addons - pacotes feitos para o ecossistema ember, chamados de addons
+Os complementos podem incluir código JavaScript, componentes de UI reutilizáveis, ferramentas de compilação, ferramentas de visualização de dados, 
+pipelines de implantação, modelos, folhas de estilo e muito mais.
+
+para isntalar um addons é usado o comando 
+ember i <addon-name>
+semelhante ao npm i- cria uma entrada no app package.json e baixa o complemento e suas dependecias e um node_modules. 
+o ember install faz mais do que o npm, alguns addons criam novos arquivos ou fazem modificações em seu aplicaçãoquando sao instalados via ember install
+
+exemplo de tabuada com template 
+{{page-title "Templates Challenge"}}
+
+{{#each
+(array
+    (hash multiple='1' results='9')
+    (hash multiple='2' results='18')
+    (hash multiple='3' results='27')
+    (hash multiple='4' results='36')
+    (hash multiple='5' results='45')
+    (hash multiple='6' results='54')
+    (hash multiple='7' results='63')
+    (hash multiple='8' results='72')
+    (hash multiple='9' results='81')
+    (hash multiple='10' results='90')
+    ) as |number|
+}}
+
+<div>
+    <p> 9 x {{number.multiple}} = {{number.results}}</p>
+</div>
+<hr>
+
+{{/each}}
+
+
+-------------------------------------------
+
+Introdução ao Roteamento
+
+router.js - contem o mapa do site do nosos aplicativo. esse arquivo é reponsavel por mapear todas
+as nossas rotas no navegador.
+
+Criando Manualmente #
+
+>Crie um arquivo no app/routesdiretório e nomeie-o como cart.js.
+>Crie um modelo para nossa rota no app/templatesdiretório chamado cart.hbs.
+
+o noem da rota e do tempalte devem ser iguais. Isso permite que o routing combine o template com a rota
+então precisamos listar essa rota no router.js para que a aplicação carregue nossa rota, adicionando no map()
+
+caso queiramos mudar o nome do caminho basta adicionar 
+ this.route('about' , {path: '/about-us'});
+
+Criando uma rota usando Ember CLI #
+
+>ember generate route cart
+
+esse comando cria um js no routes um hbs no templates lista no map() e adiciona um arquivo de teste 
+
+Tipos de Rotas #
+
+Rota básica > rotas unicas como o exemplo acima
+
+Rota aninhada > rotas dentro de rotas
+usadas quando precisamos carregar um template dentro de um template. 
+para gerar rotas aninhadas em rotas existentes COMANDO > ember g route admin/add (gera uma rota add dentro da admin)
+
+ou Manualmente
+
+Router.map(function () {
+  this.route('admin', function() {
+    this.route('add');
+  });
+});
+
+Application Route > rota padrão que carrega quando a aplicação é inicializada. 
+nesse caso carrega application.hbs 
+Colocamos conteúdos como cabeçalho, rodapé, barra de navegação ou qualquer outro conteúdo decorativo na applicationrota. 
+Todas as nossas rotas renderizam seus templates no formato application.hbs.
+
+Index Route > cada nível da rota aninhada no ember possui uma index rota para o / caminho. 
+a index rota substitui o {{outlet}} de uma rota e quando outra é carregada ela substitui a index. 
+o {{outlet}} fornece um local para outras rotas serem carregadas 
+
+isso 
+Router.map(function () {
+  this.route('index', {path: '/'});
+  this.route('admin', function() {
+    this.route('index', {path: '/'});
+    this.route('add');
+  });
+});
+
+equivale a isso 
+Router.map(function () {
+  this.route('admin', function() {
+   this.route('add');
+  });
+});
+
+Rota Dinamica > sao as que carregam dados dinamicos nas rotas. a mesma rota pode ser preenchida com diferentes 
+modelos de dados. Caso queiramos mostrar os detalhes de algum produto, os dados serao diferetens mas serao renderizados na mesma rota.
+http:localhost:4200/products/item/<item_id>
+<item_id> é alterada. 
+
+Rota 404 > carrega quando a rota nao existentes
+
+Configurações do Routing #
+
+O router.js arquivo contem as config das rotas, como um mapa do site. contem as definições de todas as rotas
+
+import EmberRouter from '@ember/routing/router';
+import config from 'e-commerce-app/config/environment';
+
+export default class Router extends EmberRouter {
+  location = config.locationType;
+  rootURL = config.rootURL;
+}
+
+Router.map(function () {
+  this.route('cart');
+});
+
+    EmberRoute classe é responsável por gerenciar URLs e o estado da aplicação 
+    ecommerce-app/config/environment o environment arquivo contem as config essenciais
+da aplicação como rootURL
+    locationType - como rota atual do aplaicativo sera manifestado na url
+    rootURL-  config que impoartamos do environment. 
+
+
+Transição entre rotas #
+ > o router começa a procurar a rota no fomrato app/router.js 
+ > assim que o roteador encontra a rota ele começa a procurar os arquivos js relacionados em app/routes e app/controllers
+ > depois de encontrar o js em app/routes, o handler de rota ember carrega o modelo da rota que contem os dados em nosso hbs template 
+ entao vemos a rota no navegador
+ > o handler route tmabem encontra o arquivo js no app/controllers e carrega sua logica no template. 
+
+
+
+Route Handlers #
+
+Os dados são carregados do banco e os handlers quem carregam os dados nas rotas
+
+temos um model hook no handler responsavel por carregar os dados. um hook é um metodo chamado automaticamente 
+em alguma ação em nossa aplicação. semrpe que uma rota é visitada seu model() hook é chamado para carregar os dados.
+
+e os dados nesse hook podem ser acessados no template usando o @model
+{{@model}}
+
+
+Modificando nossa página inicial #
+
+nosso array é substituído por @modele o #eachauxiliar percorre nosso model que retorna um array de objetos.
+
+Rota 404 #
+Adicionamos um * no caminho. Isso significa que especificamos que para qualquer coisa após a /, carregue a not-foundrota. Isso funciona para todas as rotas, exceto para a rota definida.
+
+
+Rotas Aninhadas #
+
+pagina da admin - admin carega todos
+    admin/add - entra na add route
+    admin-edit - entra an edit route ao clicar no produto
+    ember g route admin/add
+    ember g route admin/edit
+
+pagina da categoria - 
+    quando o usuario visita uma categoria - http://localhost:4200/category/<category_name>
+    quando o usuario clica em um determinado produto, abre-s uma apgina que mostre os detalhes - item rota
+cada propduto possui um id e o url sera - http://localhost:4200/category/Men/item/<id> 
+    category/item 
+
+ember g route category/item
+
+
+ 
+    <div class="row">
+        {{#each @model as |item|}}
+            
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <LinkTo @route="category" @model={{item.category_id}} >
+
+o que acontece nesse trecho de código é: o @model dignifica o array de objetos que foi importado dos dados
+o each irá passar por cada objeto guardando ele na variavel item 
+quando chamamos @model={{item.category_id}} significa que estamos chamando a vairavel item que engloba o objeto
+e dentro dele o dado category_id que substituirá o valor na url
+
+no handler da rota category adicionamos o seguinte
+ model(params){
+        return params.id;
+    }
+    o que isso faz? recebe o model passado na index.hbs routes no parametro da model()
+    aí retornamos esse modelo para category_hbs. vamos abrir o category.hbs template e definir o titulo da pagina de acordo com a categoria.
+
+ model(params){
+        return products;
+    }
+    importamos o products do data e retornamos no hannldre, entao renderizamos no category.hbs
+
+produtos por categoria #
+
+  return products.filter(({category_id}) => category_id == params.id);
+
+  o filter é uma função para arrays ele filtra com base no category_id que recebsmos do params 
+
+
+  Transição de rota #
+
+  CRUD no projeto
+
+Os produtos são criados usando a addrota.
+Os produtos podem ser lidos nas rotas admine category.
+Os produtos podem ser atualizados e excluídos da editrota.
+Os produtos podem ser pesquisados ​​e classificados nas rotas admine category.
+
+Ember Inspector #
+
+extensão para navegador da web. usado para depurar e inspecionar aplicativos Ember 
+
+Componentes #
+
+os componentes permitem converter extos e estilos de marcação em codgio reutilizavel
+ -O modelo Handlebars é um hbsarquivo que contém a UI desse componente. 
+ -O arquivo do componente JavaScript lida com todos os eventos nessa UI.
+
+ comando para criar um componente : >> ember g component <component-name>
+Os componentes devem ter um -em seu nome para evitar conflito com nomes de elementos HTML.
+
+o comando cria um arquivo app componente e um arquivo de teste
+
+ember g component-class <component-name> - cria um arquivo js para o componente
+
+ember g component test-comp > renderiza dentro co componente
+
+no category.hbs ha o seguitne codigo 
+        <CategoryProduct 
+           @source={{item.imglink}} @title={{item.product_title}} @desc={{item.desc}} @price={{item.price}}>
+        </CategoryProduct>
+dentro dele há as especificações dos atributos do componente colocadas pelo template
+
+
+PARA FAZER RODAR A ROTA ITEM >> ou seja mostrar os detalhes do produto
+
+o componente produtctDetails é renderizado na item rota
+Precisamos criar uma index rota para a nossa category rota conseguir fazer isso pois renderizadmos toda a lista de produtos da category a partir do index. 
+o {{outlet} no application.hbs template carrega as rotas index e item}
+
+ let item = products.find(({ id }) => id == params.itemkey);
+ Usamos o find método para filtrar o produto com base no arquivo itemkey. O findmétodo retorna um único elemento correspondente do array. 
+ No nosso caso, retorna um objeto da lista de produtos.
+
+ ---------------
+ outlet e yield
+
+ {{outlet}} -> Isto fornecerá um stub/hook/point no qual você pode renderizar componentes (Controller + View). Alguém poderia usar isso com o método render de rotas.
+  No seu caso, você provavelmente terá uma rota detalhada que pode ser semelhante a esta. Isso renderizaria o DetailsController com DetailsView na saída 'detailsOutlet' do modelo de índice.
+
+{{yield}} -> Indica uma área de um template que será renderizada dentro de outro template
+
+----------- Controllers ----------------------------
+
+podemos criar através do comando
+>>>ember g controller <name>
+
+o nome do controller deve ser igual ao nome da rota este comando tambem gera um teste
+
+---- Relação entre rotas e controller #
+
+os dois funcionam para uma mesma url, as rotas so podem passar model para templates, enquanto podemos definir propriedades e ações nos controladores
+
+as ações do ember sao funçoes simples que podem ser usadas em templates do ember e definidas em controladores. 
+se definirmos nossas açoes, variaveis ou propriedades no router.js elas nao estarao disponiveis para os ocmponentes filhos.
+se tentarmos acessar o resultado do model()gancho, que sao os dados, do controlador
+
+---Quando usar um controller
+Usamos um controlador para passar ações e variáveis ​​para os componentes filhos de uma rota.
+Usamos um controlador para passar propriedades computadas com base nos model()resultados do gancho.
+Usamos um controlador para usar parâmetros de consulta.
+Usamos um controlador para usar propriedades rastreadas.
+
+----Definindo uma ação #
+
+usamos o ON modificador HTML para anexar um handler de eventos a uma tag HTML
+
+ao clicar no botao o ember primeiro encontra o pratice.js (controller) e depois encontr ao clicked action no arquivo
+
+Adicionamos um @action decorador. Um @action decorador define um arquivo action. Um action é um método JavaScript que pode ser criado a partir de um modelo.
+
+---------- Tracked Property
+ importadas do glimmer
+uando uma propriedade é marcada como rastreada, ela renderiza novamente o DOM sempre que o valor dessa propriedade rastreada é alterado
+
+fn - auxiliar de função por parametro 
+
+propriedade computada - 
+get total(){
+        return this.count * this.multiple;
+    }
+
+propriedade rastreada - 
+ @tracked count = 0;
+
+    @action
+    increment(){
+        this.count = this.count+1;
+    }
+
+    @action
+    decrement(){
+        this.count = this.count-1;
+    }
+
+no controller
+ let title = this.title;
+    let desc = this.desc;
+    let price = this.price;
+
+    Recebemos o valor de nossos campos de entrada do controlador. Usamos this.'<value_name>'para acessar qualquer valor do nosso modelo
+    Para category, recebemos nosso menu de seleção e extraímos o valor selecionado.
+
+    <button class="btn btn-success" type="submit" {{on 'click' this.editProduct}}>Done</button>
+    <button class='btn btn-danger'  {{on 'click' this.deleteProduct}}>Delete</button>
+
+apóis o this são manipuladores de eventos ou seja funções
+
+ >>let title = this.get('model.product_title');
+usamos this.get('<value_name>')para receber valores dos campos de entrada. Usamos o getmétodo porque os campos de valor no templates não são definidos como strings.
+
+
+A propriedade Computed é usada quando precisamos renderizar algo com base em alguns cálculo
+
+ual função é usada para passar a modelfunção para o controlador? setupController()
+Podemos acessar o model()gancho (os dados) no router.jsarquivo. falso - Se tentarmos acessar o resultado do gancho do modelo a partir do arquivo JS da rota, obteremos apenas a própria função.
+
+ Precisamos especificar explicitamente o controlador para uma rota. - Falso - Os controladores são emparelhados com a rota usando o mesmo nome.
+
+ --------------------------
+ Ember Data #
+
+ O Ember Data nos fornece um conjunto robusto de ferramentas para lidar e gerenciar os dados do aplicativo. É usado para formatar as solicitações do servidor,
+ normalizar as respostas e gerenciar com eficiencia o cache local de dados.
+
+Ember Data models#
+
+A ideia por trás do Ember Data é organizar nossa aplicação em objetos modelos. Os modelos 
+ember data sao os objetos que sao as unidades representacionais de informação. Temos que 
+projetar esses modelos de acordo com os requsitos de nossa aplicação. Por exemplo, em um 
+aplicativo de compras online totalmente desenvolvido, podemos ter um modelo para um item, 
+um carrinho, uma fatura e assim por diante.
+
+Esses mdoelos tendem a ser persistentes. Ou seja nenhum dado é perdido quando o usuário fecha a janela do navegador. 
+Ao contrário da maioria dos modelos de carregamento de servidor, o Ember usa outros métodos 
+eficientes, como o IndexedDB, para armazenar dados no disco rígido do usuário. Podemos especificar 
+um modelo de rota que carrega os dados da memória para o componente.O Ember Data torna o gerenciamento 
+de modelos muito mais fácil e eficiente.
+
+Store#
+
+> Caso queiramos mostrar a mesma info em dois componentes separados, na maioria das 
+aplicação serão feitas duas solicitações separadas para a mesma info. aumentando o 
+custo da largura de banda para buscar dados redundantes.
+
+A ember data fornece um único armazenamento para toda a aplicação. A store é um repositório 
+central de models em nossa aplicação. Diferentes rotas e seus controladores podem solicitar 
+modelos à store, sendo a store responsável por buscá-los.
+
+
+Records#
+
+Uma instância de um model carregado do servidor é conhecida como records. Podemos criar record 
+de um determinado models e salvá-lo no servidor. um record é identificado por seu models e um 
+id exclusivo. Por exemplo, se quisermos buscar um record de um modelo chamado item 
+
+comando > this.store.findRecord('item', 1);
+
+Este record específico é identificável pelo nome do modelo item e pelo ID, que é 1.
+
+(Verdadeiro ou Falso) Cada vez que um registro é solicitado a uma loja, ela faz uma chamada de rede.
+True - Porque pode armazenar em cache os registros carregados.
+
+Adapters#
+
+O adapatador é responsavel por traduzir uma solicitação do Ember em uma solicitação do servidor. 
+Exemplo: se a aplicação solicitar um produto especifico com um ID de produto 1, o adapatador determinara 
+se o ember deve carrega-lo por http ou websocket. 
+
+quando é solicitado um record que nao esta presente no armazenamento: o adapatador é resposavel por disponibiliza-lo. 
+Se um record for atualizado, o armazenamento o entrega ao adaptador que o envia e salva no servidor. O ember fornecevarios 
+adpatadores integrados para diferentes tipos de sistemas, mas por padrão funciona com o JSON:API. 
+
+Caching#
+
+A store tem capacidade de armazenar os records em cache. se o record é carregado uma vez, a store armazena em cache isso.
+se um especifico record é requerido novamente, a store carrega o cache salvo ao inves de fazer outra requisição. isso torna 
+o ember eficiente e rapido, minimizando custos de largura de banda. 
+
+Arquitetura de dados Ember #
+
+--O fluxo de solicitação de um record
+quando nossa aplicação solicita um record record, essa solicitação é encaminhada para a store.
+A store verifica o record local. Se o record não estiver disponível, o armazenamento solicitará 
+o adaptador para ele. O adaptador então recupera o record da camada de persistência.
+
+O adaptador faz uma solicitação assíncrona ao servidor. Após finalizada essa requisição, ele cria um record com seus dados. 
+Devido a essa sincronicidade, o adaptador retorna uma promessa à store e a store retorna uma promessa ao aplicativo.
+
+--O fluxo de retorno recorde
+Após o servidor retornar a resposta para o record solicitado, o adaptador resolve a promessa 
+e retorna o record para o armazenamento m seguida, a loja recebe o record solicitado, inicializa 
+os dados, resolve a promessa e retorna esse record para a aplicação
+
+--O fluxo arquitetônico
+Se o aplicativo solicitar um record pela segunda vez, o armazenamento retornará o record do seu cache. 
+
+Depois que o aplicativo envia uma findsolicitação de record, o armazenamento retorna uma promessa e verifica o valor em seu cache.
+Após encontrar o record, a store retorna um record para resolver a promessa. Como a store possui a cópia local do record, ela não precisa do adaptador.
+
+Definindo o modelo para nossa aplicação #
+ a classe models define o >comportamento e as >propriedades dos dados apresentados ao usuário. 
+
+ Definindo atributos do modelo #
+
+ os atributos podem ser definidos usando attr 
+     
+  @attr('string') product_title;
+  nao se define id em nosso modelo porque todos os modelos ember data devem ter um id. esse id nromalmente é atribuido pelo back
+
+  os atributos sao usados para converter a carga JSON retornada de um servidor em record 
+  caso queiramos usar um customizado personalizado (conhecidos: string, number, date e boolean)
+   >>ember g transform celsius
+
+   Serialize e Deserialize #
+
+A deserialize função converte o valor para o lado do cliente.
+A serialize função converte o valor para a camada de persistência.
+
+camada de persistência: tipo a cloud 
+
+- Adapters -  adaptador configura o host de backend, o formato da URL e os cabeçalhos usados ​​para comunicação com uma API REST. 
+e precisarmos customizar nosso adaptador, podemos gerar um adaptador chamado application, que tem prioridade sobre outros adaptadores. 
+
+para criar um adapatador comando > ember g adapter <adapter_name>
+alguns tipos: 
+O ApplicationAdapter  estendido de JSONAPIAdapter, do qual importamos ember-data. 
+Usamos especificações JSON:API para comunicação do servidor HTTP para transmitir JSON via XHR.
+
+XHR(  é uma API disponível em linguagens de script para navegadores web tais como JavaScript. 
+É utilizada para enviar requisições HTTP ou HTTPS diretamente para um servidor web e carregar os dados de resposta do servidor diretamente de volta ao script.)
+
+- Serialize - a transmiassão de dados com  o datastore é formatada pelo serializador 
+
+alguns tipos
+JSONAPISerializer(atualmente o padrão)
+JSONSerializer
+RESTSerializer (o padrão antes do Ember Data 2.0)
+
+comando para criar > ember g serializer <serializer_name>
+
+ALGUNS HOOKS - O serialize()gancho pode ser usado para alterar o formato dos dados que queremos enviar para o backend. 
+O normalizeResponse() gancho é usado para alterar o formato dos dados fornecidos pelo back-end.
+
+Ember Data Store #
+
+O datastore Ember é usado para criar, pesquisar, atualizar, excluir e persistir records. atraves de method
+
+Criando record -------
+
+createRedord() - método para criar um record 
+precisamos especificar o model para o qual queremos criar um record e os atributos desse model com dados. 
+
+
+this.store.createRecord('product', {
+  title: 'Test Product',
+  desc: 'This is just a test description',
+  price: 10,
+  category: 'Men',
+  imglink : 'Sample image link'
+});
+
+Pesquisando record ------
+
+    Recuperando um único record #
+
+     findRecord() - Precisamos especificar o modelo do record que queremos pesquisar e o ID do record. 
+     retorna uma promise. se o record nao estiver no cache da loja, ele sera pesqusiado e recuperado do back e entao retornara a promise
+
+     this.store.findRecord('product', 1)  // => GET /product/1
+      .then(function(product) {
+      // Do something with `product`
+    });
+
+    peekRecord() - verifica o record no cache, nenhuma solicitação de rede será feita se o record nao for encontrado na store 
+    let product = this.store.peekRecord('product', 1); // => no network request
+
+
+    Recuperando vários records # 
+
+    findAll() - retorna uma promise e pesquisa dados no cache do armazenamento. Se os dados nao estiverem presentes no cache do armazenamento, 
+    será feita uma solicitação de rede para recuperar o resgistro do servidor. 
+    
+    this.store.findAll('product')  // => GET /products
+    .then(function(products) {
+      // Do something with `products`
+    });
+
+    retorna a PromiseArray que é preenchido com RecordArray todos os records de um modelo. 
+
+    peekAll()- procura records no cache do armazenamento sem fazer a solicitação de rede. Ele retorna um recordArray diretamente 
+    let product = this.store.peekAll('product'); // => no network request
+
+
+    Consultando vários records # 
+
+    query() -  faz uma solicitação get e o filtro é passado como parametro de consulta. retorna uma promiseArray e a promise é resolvida com o RecordArray
+    this.store.query('product', {
+    filter: {
+      category: 'Women'
+    }
+    }).then(function(products) {
+    // Do something with `products`
+    });
+
+
+    Consultando um único record #
+    queryRecord() - precisamos configurar o adapatador para que ele retorne um único objeto de models. 
+    Precisamos definir queryRecord()no adaptador. Por exemplo, suponhamos que queremos buscar o usuário logado no servidor. 
+    A API do servidor fornece um endpoint para essa finalidade da seguinte forma:
+    // GET /api/logged_in_user
+    {
+      user: {
+        id: 312,
+        username: 'admin'
+      }
+    }
+
+    Vamos definir o queryRecord()método no adaptador:
+
+    import Adapter from '@ember-data/adapter';
+    import fetch from 'fetch';
+
+    export default class UserAdapter extends Adapter {
+      queryRecord(store, type, query) {
+        return fetch('/api/logged_in_user');
+      }
+    }
+
+    Com o queryRecord() método, podemos buscar o logged_in_user endpoint do servidor. Vamos ver como podemos fazer isso:
+    
+    store.queryRecord('user', {}).then(function(user) {
+      //Do something with `user`
+    });
+
+    esse metodo retorna uma promessa resolvida com um unico record
+
+    Atualizando records #
+
+    para atualizar precisamos encontrar, entao podemos atualizar-lo na then 
+    this.store.findRecord('product', 1).then(function(product) {
+      // ...after the record has loaded
+      product.price = 20;
+    });
+
+    Excluindo records #
+    deleteRecord() - primeiro encontramos o record e depois excluimos 
+
+    let product = store.findRecord('product', 1);
+    product.deleteRecord();
+    product.isDeleted; // => true
+
+    // OR
+    product = store.peekRecord('product', 1);
+    product.destroyRecord(); // => DELETE to /products/1
+
+    primeiro encontramos e salvamos sua isntacnia em uma viariavel product. entao, usamos o deleteRecord. O sinalizador isDeleted
+    retorna true ou false. Também podemos usar o destroyRecord() para excluir um produto. Este método excluirá e persistirá as alterações ao mesmo tempo.
+    o save() aplica as alterações no servidor. 
+
+    records persistentes #
+    os records sao persistidos em EmberData. podemos ligar save() para qualquer isntancia model e ela fara uam solicitação e rede. 
+    por exemplo, quando criamos um produto, podemos atribui-lo a uma isntancia e executar o save() para envialo ao nosso banco de dados. 
+    o save() entao faz uma chamada de rede. 
+
+    let product = this.store.createRecord('product', {
+      title: 'Test Product',
+      desc: 'This is just a test description',
+      price: 10,
+      category: 'Men',
+      imglink : 'Sample image link'
+    });
+
+    product.save() //this will make a network request
+
+    O product.save()método faz uma solicitação de rede e salva nosso produto /productsno banco de dados. 
+    Da mesma forma, podemos persistir qualquer criação, exclusão ou atualização usando o save()método.
+
+    Working with a Local Data Source #
+
+Adding a local data source in category route# 
+
+antigo:
+    import Route from '@ember/routing/route';
+    import { products } from '../data/products';
+
+    export default class CategoryRoute extends Route {
+      model(params) {
+        
+        return products.filter(({ category_id }) => category_id == params.id);
+      }
+    } 
+
+novo: 
+    import Route from '@ember/routing/route';
+    // import { products } from '../data/products';
+
+    export default class CategoryRoute extends Route {
+      async model(params) {
+        const response  = await fetch('/api/products.json');
+        const {data} = await response.json();
+        return data.filter(({ category_id }) => category_id == params.id);
+      }
+    }
+
+O find método retorna um único elemento correspondente do array. 
+
+Criando um aplicativo no Firebase (ou qualquer integração com o banco)#
+
+salvar dados----
+let product = this.store.createRecord('product', {
+  title: 'Test Product',
+  desc: 'This is just a test description',
+  price: 10,
+  category: 'men',
+  imglink : 'Sample image link'
+});
+
+product.save() // This will save the product to the database.
+
+criamos um record product models usando o storage do ember data
+Persistimos o produto criado usando o save() método. O save() método 
+faz uma chamada de rede para salvar o produto no banco em /products.
+
+recuperar dados--------
+
+let products = this.store.findAll('product');  // => GET /products
+
+o store primeiro verifica os registros em seu cache local. se estiver rpesente, ele faz uma chamada de rede para recuperar 
+todos os produtos. 
+
+EmberFire
+EmberFire é um adaptador Firebase para aplicativos Ember. Ele se integra e 
+funciona diretamente com o Ember Data, que persiste os dados do nosso aplicativo.
+O EmberFire pode ser instalado como um complemento Ember CLI.
+
+ instalação : ember install emberfire@next
+
+MAS NAO USAREMOS POR FINS DE QUEBRA NA APLICAÇÃO
+
+criar serialize : ember g serializer application
+
+adicionar produtos
+
+var newproduct = this.store.createRecord('product', {
+      product_title: title,
+      desc: desc,
+      price: price,
+      category_id: category,
+      imglink: imglink,
+    });
+
+ criamos o newproduct usando o store do ember. criamos um record do product model e definimos seu atributo aos dados recebidos do add no form
+ usamos o save() para salvar o record. isso faz uma chamada de rede e salva o record no banco 
+
+ this.setProperties({
+      title: '',
+      desc: '',
+      price: '',
+      imglink: '',
+    });
+    e.value = '';
+
+  limpa o formulario
+
+  Recuperando dados  #
+
+  todas as integrações foram colocadas nas rotas 
+
+  Editando e excluindo produtos #
+
+ todas as integrações foram colocadas nas rotas, anotações direto no codigo do controller
+
+ 
+

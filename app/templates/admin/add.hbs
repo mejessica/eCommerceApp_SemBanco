@@ -1,0 +1,40 @@
+{{page-title "Add"}}
+<div class="add">
+    <form>
+        <div class="form-group">
+            <label for="exampleFormControlInput1">Title</label><br>
+            {{input type="text" class="form-control" value=this.model.product_title placeholder = "Add Title..."}}
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="exampleFormControlInput1">Description</label><br>
+            {{input type="text" class="form-control" value=this.model.desc placeholder = "Add Desc..."}}
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="exampleFormControlInput1">Price</label><br>
+            {{input type="number" class="form-control" min = "1" step="any" value=this.model.price placeholder = "Add Price..."}}
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="exampleFormControlInput1">Category</label>
+            <select class="form-select" aria-label="Default select example" id="category">
+                <option selected value="">Select a category</option>
+                <option value="men">Men</option>
+                <option value="women">Women</option>
+                <option value="kids">Kids</option>
+                <option value="homeaccessories">Home Accessories</option>
+            </select>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="exampleFormControlInput1">Image Link</label><br>
+            {{input type="text" class="form-control" value=this.model.imglink placeholder = "Add Image Link..."}}
+        </div>
+        <br>
+        </form>
+         <button class="btn btn-success" type="submit" {{on 'click' this.addProduct}}>Submit</button> 
+        <LinkTo class='btn btn-primary' @route="admin" >Close</LinkTo>
+
+    
+</div>
