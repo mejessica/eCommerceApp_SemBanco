@@ -7,9 +7,9 @@ export default class AdminEditRoute extends Route {
     // let filtered = products.filter(({ id }) => {console.log(id)
     //   id == params.id});
 
-    const response  = await fetch('/api/products.json');
-    const {data} = await response.json();
-    let filterd =  data.filter(({ id }) => id == params.id)[0];
+    const response = await fetch('/api/products.json');
+    const { data } = await response.json();
+    let filterd = data.filter(({ id }) => id == params.id)[0];
 
     let product = {
       product_title: filterd.product_title,

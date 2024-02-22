@@ -1,3 +1,45 @@
+{{!-- app/templates/cart.hbs --}}
+
 {{page-title "Cart"}}
-{{outlet}}
-<h4>Cart Route</h4>
+
+<div class="container">
+        <div class="h-100 my-5 p-5 shadow">
+            <h3 class="text-center">Cart</h3>
+            <div class="my-5"></div>
+        {{!-- acessamos o productList de cartService no cart controller. Fazemos um loop para obter e renderizar os produtos --}}
+            {{#each this.cartService.productsList as |item|}} 
+
+                <div class="container py-2 px-4 my-3 shadow text-dark">
+                    <div class="row align-items-center">
+                        <div class="col col-2">
+                            <img 
+                                src= {{item.source}}
+                                alt="" width="50px" height="50px" style="border-radius: 100%;">
+                        </div>
+                        <div class="col col-6 text-start">
+                            <div class="row align-items-center h-100">
+                                <span class="title">
+                                    {{item.title}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col col-2">
+                            <div class="row align-items-center h-100">
+                                Count: <span> {{item.count}} </span>
+                            </div>
+                        </div>
+                        <div class="col col-2">
+                            <div class="row align-items-center h-100">
+                                Price: {{item.price}}
+                            </div>
+                        </div>
+                        <div class="col col-2">
+                            <div class="row align-items-center h-100">
+                                Total: <span class="total">{{item.total}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </div>

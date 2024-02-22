@@ -394,8 +394,8 @@ usamos this.get('<value_name>')para receber valores dos campos de entrada. Usamo
 
 A propriedade Computed é usada quando precisamos renderizar algo com base em alguns cálculo
 
-ual função é usada para passar a modelfunção para o controlador? setupController()
-Podemos acessar o model()gancho (os dados) no router.jsarquivo. falso - Se tentarmos acessar o resultado do gancho do modelo a partir do arquivo JS da rota, obteremos apenas a própria função.
+qual função é usada para passar a model função para o controlador? setupController()
+Podemos acessar o model()gancho (os dados) no router.js arquivo. falso - Se tentarmos acessar o resultado do gancho do modelo a partir do arquivo JS da rota, obteremos apenas a própria função.
 
  Precisamos especificar explicitamente o controlador para uma rota. - Falso - Os controladores são emparelhados com a rota usando o mesmo nome.
 
@@ -441,7 +441,7 @@ comando > this.store.findRecord('item', 1);
 Este record específico é identificável pelo nome do modelo item e pelo ID, que é 1.
 
 (Verdadeiro ou Falso) Cada vez que um registro é solicitado a uma loja, ela faz uma chamada de rede.
-True - Porque pode armazenar em cache os registros carregados.
+False - Porque pode armazenar em cache os registros carregados.
 
 Adapters#
 
@@ -753,5 +753,222 @@ var newproduct = this.store.createRecord('product', {
 
  todas as integrações foram colocadas nas rotas, anotações direto no codigo do controller
 
- 
+--------------------------------------
+ FUNÇÕES AUXILIZARES #
+  
+São funções js que podem ser chamadas a aprtir de um modelo. A sintaxe do mdoelo do Ember limtia o que pode ser expresso para manter a estrutura do aplicativo clara. 
+se precisarmos calcular algo em js, podemos usar uma função auxiliar. 
 
+Podemos escrever um auxiliar personalizado ou usar o auxiliar integrado fornecido pelo ember
+Um auxiliar recebe um parametro passado para a função e retorna um valor. Veja como usamod um auxiliar dentro de um modelo
+<p>{{helper arguments}}</p>
+
+Gerando ajudantes #
+ comando: ember g helper <helper_name>
+
+ ele cria um arquivo e um arquivo teste
+
+Ajudantes integrados #
+O ember fornece alguns ajudantes integrados úteis para executar determinadas tarefas. 
+
+{{on}}
+
+{{concat}}
+
+{{get}}
+
+{{hash}}
+
+{{let}}
+
+{{if}}
+
+{{unless}}
+
+{{each}}
+
+{{array}}
+
+{{in-element}}
+
+Ajudantes personalizados #
+
+isso é util quando repetimos HTML dentro do nosso modelo. 
+para evitar duplicação e redundância de código, podemos definir nosso proprio e invoca-lo dentro de nossa base de codigo 
+
+Nota : As funções auxiliares são definidas dentro da app/helperspasta do nosso aplicativo Ember.
+
+  Ajudantes de função #
+
+  funções sao uma forma de definir auxiliares. escrevemos funções auxiliares da mesma forma que escrevemos funções js 
+  os argumentos para auxiliares de função sao passados na forma de um array 
+
+  import { helper } from '@ember/component/helper';
+
+  function isEqual(args) {
+    let [firstInteger, secondInteger] = args;
+    return firstInteger === secondInteger;
+  }
+
+  export default helper(isEqual); 
+
+  função que verifica se dois numeros sao iguais
+
+  chamada da função na aplicação 
+  <p>{{isEqual 2 4}}</p>
+
+  usando com argumentos nomeados 
+  <p>{{isEqual firstInteger=2 secondInteger=4}}</p>
+
+  Ajudantes de classe #
+
+  podemos definir por classes tambem
+
+  import Helper from '@ember/component/helper';
+
+  export default class isEqual extends Helper {
+    compute([firstInteger, secondInteger]) {
+      return firstInteger === secondInteger;
+    }
+  }
+
+  Nota: Os auxiliares de classe devem ser usados ​​quando o auxiliar for complexo, exigir grande atenção ao ciclo de vida do auxiliar ou tiver estado.
+
+Funções auxiliares integradas #
+
+
+{{on}} - registrar um listening de evento para um elemento > {{on "click" (addFunction 2 4)}}
+
+{{concat}} - concatena multiplas strings > {{concat "Andrew " "Garfield"}}
+
+{{get}} - usado para obter o valor com uma determinada chave > {{get this.product "name"}} (tipo this.product.name)
+
+{{hash}} - cria um hash dos pares de valores-chave fornecidos  
+@user = {{hash firstName="Andrew" 
+lastName="Garfield"}}
+criamos um hash de e firstNamee lastNameo armazenamos dentro da uservariável.
+
+{{let}} - ajuda a definir uma variavel temporaria do nosso modelo > {{let (concat "Andrew " "Garfield") as |fullName|}}
+concatenamos Andrewe Garfieldas Andrew Garfielde armazenamos o resultado como uma variável temporária dentro de fullName.
+
+{{if}} - Funciona exatamente como if-else  > {{if loginSuccessful 'Welcome' 'Error'}} 
+Se o usuário efetuar login com sucesso, Welcomeserá exibido. Caso contrário, Errorserá exibido.
+
+{{unless}} - inverso do if > {{unless loginSuccessful 'Error' 'Welcome'}}
+a menos que o login seja bem-sucedido, Errordeverá ser exibido. Assim que for bem-sucedido, Welcomedeverá ser exibido.
+
+{{each}} -  É como um forloop que itera sobre o conteúdo de uma lista ou array e depois os imprime. 
+{{#each list as |item|}}
+<p>{{item.name}}</p>
+<p>{{item.price}}</p>
+{{/each}}
+iteramos liste imprimimos o nome e o preço de cada item.
+
+{{array}} - juda a passar arrays diretamente do modelo como argumento para os componentes 
+{{array `apple` `mango` `peach`}}
+criamos um array que contém frutas. Podemos passar esse array para nossos componentes.
+
+{{in-element}} - permite renderizar o conteudo em um elemnto DOM que está em algum outro local dentro da página 
+por exemplo, renderizando um modal, uma dica de ferramenta ou um menu suspenso: 
+{{in-element destinationElement}}
+Fornecemos o elemento de destino ao {{in-element}}auxiliar. Em outras palavras, fornecemos o local onde renderizar o conteúdo para o auxiliar.
+
+
+SERVICE # 
+
+O serviço ember é um objeto usado para manter o estado de um atributo especifico. os serviços podem ser disponibilizados em todo o aplicativo 
+durante o ciclo de vida. podemos acessar um serviço a partir de diferentes componentes e rotas. Diferentes serviços Ember também podem se comunicar entre si
+
+Quando devemos usar? #
+
+Uteis quando precisamos gerenciar sessões de usuário, estados compartilhados e conexões persistentes. 
+Exemplo: manter sessão do usuário. o servidor enviará uma solicitação da página de login e recuperará o usuário.
+services sao importantes em: 
+
+Manutenção de sessões de usuário
+Informações para usuários logados
+Exibindo informações do usuário
+
+criando um service: ember g service <service-name>
+
+Como acessar um service #
+
+Podemos injeta-lo em um componente. geralmente, importamos o service mas neste caso, importamos inject as servicepara distingui-lo da service importação:
+import {inject as service} from '@ember/service';
+
+agora podemos usa-lo como decorator 
+@service <service-name>
+Isso procurará o serviço nomeado <service-name>no app/servicesdiretório.
+
+para add arquivo controller para algum componente > ember g component-class product-details
+
+
+TESTES #
+
+ferramentas necessárias para teste
+
+- QUnit e QUnit DOM - criar testes consicos e fáceis de ler 
+- Mocha, Chai DOM - Mocha é uma estrutura de teste js assincrona que roda em node. ele executa uma operação por vez, permite testes e relatorios precisos 
+- Ember CLI 
+
+comandos :
+ember g model-test teacher
+ember g component-test teacher
+ember g acceptance-test teachers
+
+Os comandos acima geram os três arquivos de teste a seguir:
+
+O primeiro gera um arquivo de teste unitário para o teacher modelo.
+A segunda gera um arquivo de teste de integração para o teacher componente.
+O terceiro gera um arquivo de teste de aceitação para verificar rotas e subrotas para o arquivo teachers. 
+
+Executar os testes: 
+ember test ou ember t 
+
+executar semrpe que houver alteração 
+ember teste --server ou ember t -s 
+
+Filtrar testes 
+--module ou --filter 
+ ember help test para mais infos 
+
+Testes de depuração 
+caso os testes falhem
+
+Nota: As funções pauseTest()e resumeTest()também podem ser usadas para depuração. 
+Podemos usá-los para inspecionar o DOM. Essas funções também podem ser usadas para testar a base de código.
+
+Tipos de testes 
+Unit tests - verificam a exatidão de unidades individuais de codigo, como function e methods. mais faceis de depurar e podem ser executadas rapidamente  
+
+Rendering tests -  inspecionar a aparencia dos compoenentes auxiliares. os testes de renderização nos permitem testar a experiencia do usuario (UI) 
+
+Application tests  - testar stories e features de usuarios. isso é feito criando uma instancia do aplicação ember. mais lento, mas importante para o ponto de vista do usuario 
+-------
+Unit test - verificam se um metodo especifico retornou a saida correta para a entrada. 
+podem ser usados para: route, controller, service, helper, model, adpater, serializer, utils
+
+na aplicação testamos no cart-service
+
+no teste que ja vem por padrao: 
+setupTest é importado do ember-qunit para configurar o gancho do ciclo de vida de teste 
+this.owner.lookup - method que obtem a isntancia do serviço 
+assert.ok() - passamos a isntancia so service para verificar o teste
+
+Integration/Rendering Testing #
+Inspecionam a aparencia e o comportamento de um componente e helpers. a renderização de modelos em elementos DOM é testada por testes de integração 
+
+no projeto testamos o admin-project
+
+setupRenderingTest - o teste é configurado por esse method 
+test - função importada do qunit
+render - metodo que renderiza o componenete 
+assert - função que testa se o componente renderiza a saída correta 
+
+
+Accpetance/Application Testing # 
+
+testam o fluxo de trabalho da aplicação. Podemos validar os recursos da perspectiva do usuário final. 
+comando> ember g acceptance-test <test-name>
+
+await visit('/') - testa a pagina inicial do aplicativo 
